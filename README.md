@@ -1,6 +1,6 @@
 # LumenLearn LMS
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/navasanganakah/lumenlearn-cloud-native-learning-management-system)
 
 A modern, full-stack Learning Management System built with React and Cloudflare Workers. This project demonstrates a production-ready architecture featuring persistent storage with Durable Objects, a type-safe API layer, and a polished React frontend.
 
@@ -96,7 +96,7 @@ The backend exposes the following REST endpoints under `/api`:
 
 ## Deployment
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/navasanganakah/lumenlearn-cloud-native-learning-management-system)
 
 Deploy to Cloudflare Workers using Wrangler:
 
