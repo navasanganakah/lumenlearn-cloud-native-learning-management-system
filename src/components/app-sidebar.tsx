@@ -1,72 +1,96 @@
-/* This is a demo sidebar. **COMPULSORY** Edit this file to customize the sidebar OR remove it from appLayout OR don't use appLayout at all */
 import React from "react";
-import { Home, Layers, Compass, Star, Settings, LifeBuoy } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  BookOpen, 
+  FileText, 
+  GraduationCap, 
+  Users, 
+  Settings,
+  Sparkles,
+  ChevronRight
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
-  SidebarSeparator,
-  SidebarInput,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuAction,
-  SidebarMenuBadge,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-
-export function AppSidebar(): JSX.Element {
+import { useLocation, Link } from "react-router-dom";
+import { UserRole } from "@shared/types";
+import { cn } from "@/lib/utils";
+interface AppSidebarProps {
+  userRole?: UserRole;
+}
+export function AppSidebar({ userRole = 'Student' }: AppSidebarProps): JSX.Element {
+  const location = useLocation();
+  const studentLinks = [
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
+    { name: 'My Courses', icon: BookOpen, path: '/student/courses' },
+    { name: 'Assignments', icon: FileText, path: '/student/assignments' },
+    { name: 'Grades', icon: GraduationCap, path: '/student/grades' },
+  ];
+  const teacherLinks = [
+    { name: 'Teacher Panel', icon: LayoutDashboard, path: '/teacher/dashboard' },
+    { name: 'Course Manager', icon: BookOpen, path: '/teacher/courses' },
+    { name: 'Grading', icon: GraduationCap, path: '/teacher/grading' },
+  ];
+  const adminLinks = [
+    { name: 'Admin Hub', icon: LayoutDashboard, path: '/admin/dashboard' },
+    { name: 'Manage Users', icon: Users, path: '/admin/users' },
+    { name: 'Site Settings', icon: Settings, path: '/admin/settings' },
+  ];
+  const activeLinks = userRole === 'Student' ? studentLinks : userRole === 'Teacher' ? teacherLinks : adminLinks;
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-1">
-          <div className="h-6 w-6 rounded-md bg-gradient-to-br from-indigo-500 to-purple-500" />
-          <span className="text-sm font-medium">Demo Sidebar</span>
+    <Sidebar className="border-r border-border/50">
+      <SidebarHeader className="h-16 flex items-center px-6 border-b border-border/40">
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded-lg bg-gradient-primary flex items-center justify-center shadow-sm">
+            <Sparkles className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-lg font-display font-bold tracking-tight">LumenLearn</span>
         </div>
-        <SidebarInput placeholder="Search" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive>
-                <a href="#"><Home /> <span>Home</span></a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Layers /> <span>Projects</span></a>
-              </SidebarMenuButton>
-              <SidebarMenuAction>
-                <Star className="size-4" />
-              </SidebarMenuAction>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Compass /> <span>Explore</span></a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-
-        <SidebarSeparator />
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Quick Links</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="#"><Star /> <span>Starred</span></a>
-              </SidebarMenuButton>
-              <SidebarMenuBadge>5</SidebarMenuBadge>
-            </SidebarMenuItem>
+          <SidebarGroupLabel className="px-6 text-2xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+            {userRole} Menu
+          </SidebarGroupLabel>
+          <SidebarMenu className="px-3 space-y-1 mt-2">
+            {activeLinks.map((link) => (
+              <SidebarMenuItem key={link.path}>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={location.pathname === link.path}
+                  className={cn(
+                    "transition-all duration-200 h-11 px-4",
+                    location.pathname === link.path 
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90"
+                      : "hover:bg-accent text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Link to={link.path}>
+                    <link.icon className="w-5 h-5 mr-3" />
+                    <span className="font-medium">{link.name}</span>
+                    {location.pathname === link.path && <ChevronRight className="ml-auto w-4 h-4 opacity-50" />}
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <div className="px-2 text-xs text-muted-foreground">A simple shadcn sidebar</div>
+      <SidebarFooter className="p-4 border-t border-border/40">
+        <div className="flex items-center gap-3 px-2">
+           <div className="flex flex-col">
+             <span className="text-xs font-semibold text-foreground/80">Premium Account</span>
+             <span className="text-[10px] text-muted-foreground">Active until Dec 2025</span>
+           </div>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
